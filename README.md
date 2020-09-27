@@ -58,9 +58,14 @@ qiime demux summarize \
 
 ## Trim reads
 
-* qiime2 cutadapt trim-paired docs: https://docs.qiime2.org/2019.10/plugins/available/cutadapt/trim-paired/
-* cutadapt docs: https://cutadapt.readthedocs.io/en/stable/guide.html
-* cutadapt paper: https://doi.org/10.14806/ej.17.1.200
+Remove the primers from reads with cutadapt.
+
+* [QIIME2 cutadapt trim-paired documentation](https://docs.qiime2.org/2019.10/plugins/available/cutadapt/trim-paired/)
+* [Cutadapt standalone documentation](https://cutadapt.readthedocs.io/en/stable/guide.html)
+* [Martin 2011](https://doi.org/10.14806/ej.17.1.200)
+
+Parameter notes:
+* This example shows trimming [linked adapters](https://cutadapt.readthedocs.io/en/stable/guide.html#linked-adapters-combined-5-and-3-adapter) as the amplicon is "framed" by both a 5' and 3' adapter. This is equivalent to usine the -a and -A options in cutadapt and shows the forward primer linked to the reverse complement of the reverse primer and vice versa. The --p-front-f and --p-front-r options may also be used.
 * Number of CPU cores (--p-cores) can be increased up to the number of available cores.
 
 ```
@@ -79,7 +84,7 @@ Visualize trimmed sequences:
 
 ```
 qiime demux summarize \
-    --i-data 2020_Lpoly_16S_paired-end-demux-trimmed.qza \
+    --i-data paired-end-demux-trimmed.qza \
     --p-n 100000 \
     --o-visualization paired-end-demux-trimmed.qzv
 ```
