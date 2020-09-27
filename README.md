@@ -9,6 +9,10 @@ QIIME2 visualizations can be viewed [here](https://view.qiime2.org/).
 * [Silva 138](https://docs.qiime2.org/2020.8/data-resources/?highlight=silva) SSURef NR99 full-length sequences and taxonomy
 * [PhytoREF](http://phytoref.sb-roscoff.fr/)
 
+## Important Notes
+* This is a generic protocol. We often append a unique project ID to the beginning of all filenames throughout.
+* Some of the specified options may not be appropriate and need to be adjusted according to your data and configuration. Consult the [QIIME2 documentation](https://docs.qiime2.org/2019.10/) and other software documentation where appropriate to fully understand what each command and option is doing. We have attempted to point out specific examples where parameters need to be adjusted but these should not be viewed as a comprehensive list.
+
 ## Start
 
 Activate your conda environment for QIIME2 and cd to your working directory
@@ -17,8 +21,6 @@ Activate your conda environment for QIIME2 and cd to your working directory
 source activate qiime2-2019.10
 cd $working_directory
 ```
-
-Note that this is a generic protocol. We often append a unique project ID to the beginning of all filenames.
 
 ## Import files
 
