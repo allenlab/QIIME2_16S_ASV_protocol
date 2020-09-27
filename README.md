@@ -90,6 +90,47 @@ qiime demux summarize \
 
 ## Denoise with DADA2
 
+Generate and quantify amplicon sequence variants ASVs with DADA2
+
+* [QIIME2 DADA2 denoise-paired docmentation](https://docs.qiime2.org/2019.10/plugins/available/dada2/denoise-paired/)
+* DADA2 [website](https://benjjneb.github.io/dada2/index.html) and [FAQ](https://benjjneb.github.io/dada2/faq.html) ([Callahan et al. 2016](https://doi.org/10.1038/nmeth.3869))
+
+Parameter notes:
+* --p-n-threads is set to 0 which uses all available cores. Adjust accordingly.
+* --p-max-ee-r is set to 4 (default: 2) which we often do for MiSeq 2x300 runs. You may want to adjust the max-ee paramters (number of expected errors) depending on your data.
+* --p-trunc-len-f and --p-trunc-len-r are base on typical read quality profiles we observed with MiSeq 2x300 sequencing. It is highly likely you should adjust these parameters for your own sequencing run. However, DADA2 requires a minimum of 20 nucleotides of overlap.
+* If you have a large project that spans multiple sequence runs, run dada2 separately on each run. This is because different runs can have different error profiles (See https://benjjneb.github.io/dada2/bigdata.html). Since ASVs have single nucleotide level resolution, the data can later be merged (see instructions below). If merging data, ensure that your dada2 parameters are consistent. 
+
+```
+qiime dada2 denoise-paired \
+    --i-demultiplexed-seqs paired-end-demux-trimmed.qza \
+    --p-n-threads 0 \
+    --p-trunc-q 2 \
+    --p-trunc-len-f 219 \
+    --p-trunc-len-r 194 \
+    --p-max-ee-f 2 \
+    --p-max-ee-r 4 \
+    --p-n-reads-learn 1000000 \
+    --p-chimera-method pooled \
+    --output-dir ./asvs/ \
+    --o-table table-dada2.qza \
+    --o-representative-sequences rep-seqs-dada2.qza \
+    --o-denoising-stats stats-dada2.qza
+
+# Files don't actually get put in output-dir
+mv table-dada2.qza ./asvs/
+mv rep-seqs-dada2.qza ./asvs/
+mv stats-dada2.qza ./asvs/
+```
+
+Generate and examine the DADA2 stats. You should be retaining most (>50%) of your sequences. If you are losing a large number of sequences at a certain DADA2 step, you will need to troubleshoot and adjust your DADA2 parameters accordingly.
+
+```
+qiime metadata tabulate \
+  --m-input-file ./asvs/stats-dada2.qza \
+  --o-visualization ./asvs/stats-dada2.qzv
+```
+
 ## Merge and summarize denoised data
 
 ## Taxonomic annotation
