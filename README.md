@@ -178,7 +178,46 @@ qiime feature-table summarize \
   --m-sample-metadata-file metadata.tsv
 ```
 
-
 ## Taxonomic annotation
+
+* The [Naive Bayes Classifier](https://docs.qiime2.org/2019.10/tutorials/feature-classifier/) is used here.
+* We place the relavent database files under a folder called 'db'
+
+### Silva
+
+QIIME2 compatable files can be obtained [here](https://docs.qiime2.org/2020.8/data-resources/?highlight=silva).
+
+Extract the region between the primers and and train the classifier:
+
+```
+qiime feature-classifier extract-reads \
+  --i-sequences ./db/silva/silva-138-99-seqs.qza \
+  --p-f-primer GTGYCAGCMGCCGCGGTAA \
+  --p-r-primer CCGYCAATTYMTTTRAGTTT \
+  --o-reads ./db/silva/silva-138-99-extracts.qza
+
+qiime feature-classifier fit-classifier-naive-bayes \
+  --i-reference-reads ./db/silva/silva-138-99-extracts.qza \
+  --i-reference-taxonomy ./db/silva/silva-138-99-tax.qza \
+  --o-classifier ./db/silva/silva-138-99-classifier.qza
+```
+
+Classify the ASVs. The option --p-n-jobs -1 uses the all CPUs. Adjust accordingly. :
+
+```
+qiime feature-classifier classify-sklearn \
+  --p-n-jobs -1 \
+  --i-classifier ./db/silva/silva-138-99-classifier.qza \
+  --i-reads ./asvs/merged_rep-seqs.qza \
+  --o-classification silva_tax_sklearn.qza
+  
+qiime tools export \
+  --input-path silva_tax_sklearn.qza \
+  --output-path asv_tax_dir
+
+mv asv_tax_dir/taxonomy.tsv asv_tax_dir/silva_taxonomy.tsv
+```
+
+### Phytoref
 
 ## Final output table
