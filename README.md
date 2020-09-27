@@ -58,6 +58,32 @@ qiime demux summarize \
 
 ## Trim reads
 
+* qiime2 cutadapt trim-paired docs: https://docs.qiime2.org/2019.10/plugins/available/cutadapt/trim-paired/
+* cutadapt docs: https://cutadapt.readthedocs.io/en/stable/guide.html
+* cutadapt paper: https://doi.org/10.14806/ej.17.1.200
+* Number of CPU cores (--p-cores) can be increased up to the number of available cores.
+
+```
+qiime cutadapt trim-paired \
+    --i-demultiplexed-sequences paired-end-demux.qza  \
+    --p-cores 1 \
+    --p-adapter-f ^GTGYCAGCMGCCGCGGTAA...AAACTYAAAKRAATTGRCGG \
+    --p-adapter-r ^CCGYCAATTYMTTTRAGTTT...TTACCGCGGCKGCTGRCAC \
+    --p-error-rate 0.1 \
+    --p-overlap 3 \
+    --verbose \
+    --o-trimmed-sequences paired-end-demux-trimmed.qza
+```
+
+Visualize trimmed sequences:
+
+```
+qiime demux summarize \
+    --i-data 2020_Lpoly_16S_paired-end-demux-trimmed.qza \
+    --p-n 100000 \
+    --o-visualization paired-end-demux-trimmed.qzv
+```
+
 ## Denoise with DADA2
 
 ## Merge and summarize denoised data
