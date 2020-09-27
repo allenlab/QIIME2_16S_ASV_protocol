@@ -133,6 +133,52 @@ qiime metadata tabulate \
 
 ## Merge and summarize denoised data
 
+If you have multiple sequencing runs, proceed with merging the table and sequences from separate dada2 runs. If not, proceed to the summarization and export steps.
+
+Merge (add additional lines for --i-tables and --i-data as needed):
+
+```
+qiime feature-table merge \
+  --i-tables ./asvs/run1_table-dada2.qza \
+  --i-tables ./asvs/run2_table-dada2.qza \
+  --o-merged-table merged_table-dada2.qza
+
+qiime feature-table merge-seqs \
+  --i-data ./asvs/run1_rep-seqs-dada2.qza \
+  --i-data ./asvs/run2_rep-seqs-dada2.qza \
+  --o-merged-data merged_rep-seqs.qza
+```
+
+Summarize and export:
+
+```
+qiime tools export \
+  --input-path merged_table-dada2.qza \
+  --output-path asv_table
+
+biom convert -i asv_table/feature-table.biom -o asv_table/asv-table.tsv --to-tsv
+```
+
+```
+qiime tools export \
+  --input-path merged_rep-seqs.qza \
+  --output-path asvs
+
+qiime feature-table tabulate-seqs \
+  --i-data merged_rep-seqs.qza \
+  --o-visualization merged_rep-seqs.qzv
+```
+
+If you have metadata, you can include it here:
+
+```
+qiime feature-table summarize \
+  --i-table merged_table-dada2.qza \
+  --o-visualization merged_table-dada2.qzv \
+  --m-sample-metadata-file metadata.tsv
+```
+
+
 ## Taxonomic annotation
 
 ## Final output table
