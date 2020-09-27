@@ -1,6 +1,6 @@
 # Protocol for processing 16S sequences in QIIME2
 
-This document describes our procedure for processing 16S amplicon libraries using the 515F-Y/926R primer set [Parada et al. 2015](https://doi.org/10.1111/1462-2920.13023). For annotation, we primarily use the SILVA database but supplement with PhytoREF for plastid sequences. 
+This document describes our procedure for processing 16S amplicon libraries using the 515F-Y/926R primer set ([Parada et al. 2015](https://doi.org/10.1111/1462-2920.13023)). For annotation, we primarily use the SILVA database but supplement with PhytoREF for plastid sequences. 
 
 QIIME2 visualizations can be viewed [here](https://view.qiime2.org/).
 
