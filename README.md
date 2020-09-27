@@ -12,6 +12,7 @@ QIIME2 visualizations can be viewed [here](https://view.qiime2.org/).
 ## Important Notes
 * This is a generic protocol. We often append a unique project ID to the beginning of all filenames throughout.
 * Some of the specified options may not be appropriate and need to be adjusted according to your data and configuration. Consult the [QIIME2 documentation](https://docs.qiime2.org/2019.10/) and other software documentation where appropriate to fully understand what each command and option is doing. We have attempted to point out specific examples where parameters need to be adjusted but these should not be viewed as a comprehensive list.
+* Refer to the QIIME2 documentation [here](https://docs.qiime2.org/2019.10/citation/) on how to properly cite QIIME2 and plugins used.
 
 ## Start
 
