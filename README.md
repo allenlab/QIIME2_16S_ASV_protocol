@@ -1,8 +1,12 @@
 # Protocol for processing 16S sequences in QIIME2
 
-This document describes our procedure for processing 16S amplicon libraries using the 515F-Y/926R primer set ([Parada et al. 2015](https://doi.org/10.1111/1462-2920.13023)). For annotation, we primarily use the SILVA database but supplement with PhytoREF for plastid sequences. 
+This document describes our procedure for processing 16S amplicon libraries using the 515F-Y/926R primer set ([Parada et al. 2015](https://doi.org/10.1111/1462-2920.13023)). Amplicon sequence variants are generated with DADA2 ([Callahan et al. 2016](https://doi.org/10.1038/nmeth.3869)). For annotation, we primarily use the SILVA database but supplement with PhytoREF for plastid sequences. 
 
 QIIME2 visualizations can be viewed [here](https://view.qiime2.org/).
+
+We normally but not exclusively generate these libraries from DNA and RNA extracted from Sterivex filters. See our automated extraction protocols here:
+* [Sterivex DNA extraction](https://dx.doi.org/10.17504/protocols.io.bc2hiyb6)
+* [Sterivex RNA extraction](https://dx.doi.org/10.17504/protocols.io.bd9ti96n)
 
 ## Requirements
 * [QIIME2 Version 2019.10](https://docs.qiime2.org/2019.10/) or higher
