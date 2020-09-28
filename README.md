@@ -98,7 +98,7 @@ Generate and quantify amplicon sequence variants ASVs with DADA2
 Parameter notes:
 * --p-n-threads is set to 0 which uses all available cores. Adjust accordingly.
 * --p-max-ee-r is set to 4 (default: 2) which we often do for MiSeq 2x300 runs. You may want to adjust the max-ee paramters (number of expected errors) depending on your data.
-* --p-trunc-len-f and --p-trunc-len-r are base on typical read quality profiles we observed with MiSeq 2x300 sequencing. It is highly likely you should adjust these parameters for your own sequencing run. However, DADA2 requires a minimum of 20 nucleotides of overlap.
+* --p-trunc-len-f and --p-trunc-len-r are base on typical read quality profiles we observe with MiSeq 2x300 sequencing. It is highly likely you should adjust these parameters for your own sequencing run. However, DADA2 requires a minimum of 20 nucleotides of overlap.
 * If you have a large project that spans multiple sequence runs, run dada2 separately on each run. This is because different runs can have different error profiles (See https://benjjneb.github.io/dada2/bigdata.html). Since ASVs have single nucleotide level resolution, the data can later be merged (see instructions below). If merging data, ensure that your dada2 parameters are consistent. 
 
 ```
