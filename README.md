@@ -265,9 +265,10 @@ Classify ASVs:
 
 ```
 qiime feature-classifier classify-sklearn \
-	--i-classifier ./db/phytoref/phytoref_classifier.qza \
-	--i-reads merged_rep-seqs.qza \
-	--o-classification phytoref_tax_sklearn.qza
+  --p-n-jobs -1 \
+  --i-classifier ./db/phytoref/phytoref_classifier.qza \
+  --i-reads merged_rep-seqs.qza \
+  --o-classification phytoref_tax_sklearn.qza
 
 qiime tools export \
   --input-path phytoref_tax_sklearn.qza \
