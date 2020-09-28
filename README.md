@@ -202,7 +202,7 @@ qiime feature-classifier fit-classifier-naive-bayes \
   --o-classifier ./db/silva/silva-138-99-classifier.qza
 ```
 
-Classify the ASVs. The option --p-n-jobs -1 uses the all CPUs. Adjust accordingly. :
+Classify the ASVs. The option --p-n-jobs -1 uses the all CPUs. Adjust accordingly:
 
 ```
 qiime feature-classifier classify-sklearn \
@@ -218,6 +218,62 @@ qiime tools export \
 mv asv_tax_dir/taxonomy.tsv asv_tax_dir/silva_taxonomy.tsv
 ```
 
-### Phytoref
+### PhytorREF
+
+Create a simple fasta file and tab-delimited taxonomy file that links the fasta IDs to the taxonomic string. For example:
+
+```
+$ head PhytoRef_with_taxonomy_simple.fasta
+>202
+GGCATGCTTAACACATGCAAGTTGAACGAAGACAAAAATTAGGCTTGCCAAAGTTTTGGA
+CTTAGTAGCGGACGGGTGAGTAACGCGTAAGAATCTACCCCTAGGAAAAGCATAACAACT
+GGAAACGGTTGCTAATACTTTATATGCTGAGAAGTTAAATGGGTTTCCGCCTAGGGATGA
+
+$ head PhytoRef_taxonomy.tsv
+202     HE610155|Eukaryota|Archaeplastida|Chlorophyta|Ulvophyceae|Ulvophyceae_X|Ulvophyceae_XX|Ulvophyceae_XXX|Ulvophyceae_XXXX|Desmochloris|Desmochloris halophila
+803     AF514849|Eukaryota|Stramenopiles|Ochrophyta|Bacillariophyta|Bacillariophyceae|Naviculales|Naviculales_X|Naviculaceae|Haslea|Haslea crucigera
+819     X80390|Eukaryota|Hacrobia|Haptophyta|Prymnesiophyceae|Prymnesiophyceae_X|Coccolithales|Coccolithales_X|Hymenomonadaceae|Ochrosphaera|Ochrosphaera neapolitana
+```
+
+Import the sequence data, select the region between the primers, and train the classifier:
+
+```
+qiime tools import \
+  --type 'FeatureData[Sequence]' \
+  --input-path ./db/phytoref/PhytoRef_with_taxonomy_simple.fasta  \
+  --output-path ./db/phytoref/phytoref.qza
+
+qiime tools import \
+  --type 'FeatureData[Taxonomy]' \
+  --input-format HeaderlessTSVTaxonomyFormat \
+  --input-path ./db/phytoref/PhytoRef_taxonomy.tsv \
+  --output-path ./db/phytoref/phytoref_tax.qza
+
+qiime feature-classifier extract-reads \
+  --i-sequences ./db/phytoref/phytoref.qza \
+  --p-f-primer GTGYCAGCMGCCGCGGTAA \
+  --p-r-primer CCGYCAATTYMTTTRAGTTT \
+  --o-reads ./db/phytoref/phytoref_extracts.qza
+  
+qiime feature-classifier fit-classifier-naive-bayes \
+  --i-reference-reads ./db/phytoref/phytoref_extracts.qza \
+  --i-reference-taxonomy ./db/phytoref/phytoref_tax.qza \
+  --o-classifier ./db/phytoref/phytoref_classifier.qza
+```
+
+Classify ASVs:
+
+```
+qiime feature-classifier classify-sklearn \
+	--i-classifier ./db/phytoref/phytoref_classifier.qza \
+	--i-reads merged_rep-seqs.qza \
+	--o-classification phytoref_tax_sklearn.qza
+
+qiime tools export \
+  --input-path phytoref_tax_sklearn.qza \
+  --output-path asv_tax_dir
+
+mv asv_tax_dir/taxonomy.tsv asv_tax_dir/phytoref_taxonomy.tsv
+```
 
 ## Final output table
