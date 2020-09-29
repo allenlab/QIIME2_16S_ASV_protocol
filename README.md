@@ -1,6 +1,6 @@
 # Protocol for processing 16S sequences in QIIME2
 
-This document describes our procedure for processing 16S amplicon libraries using the 515F-Y/926R primer set ([Parada et al. 2015](https://doi.org/10.1111/1462-2920.13023)). Amplicon sequence variants are generated with DADA2 ([Callahan et al. 2016](https://doi.org/10.1038/nmeth.3869)). For annotation, we primarily use the SILVA database but supplement with PhytoREF for plastid sequences. 
+This document describes our procedure for processing 16S amplicon libraries using the 515F-Y/926R primer set ([Parada et al. 2015](https://doi.org/10.1111/1462-2920.13023)). Amplicon sequence variants are generated with DADA2 ([Callahan et al. 2016](https://doi.org/10.1038/nmeth.3869)). For annotation, we primarily use the [SILVA database](https://www.arb-silva.de/) but supplement with [PhytoREF](http://phytoref.sb-roscoff.fr/) for plastid sequences. 
 
 QIIME2 visualizations can be viewed [here](https://view.qiime2.org/).
 
@@ -29,7 +29,7 @@ cd $working_directory
 
 ## Import files
 
-This assumes your data are provided as demultiplexed fastq files with PHRED 33 encoded quality scores. If your data are in a different format, see the [QIIME2 documentation on importing data](https://docs.qiime2.org/2019.10/tutorials/importing/).
+This assumes your data are provided as demultiplexed paired-end fastq files with PHRED 33 encoded quality scores. If your data are in a different format, see the [QIIME2 documentation on importing data](https://docs.qiime2.org/2019.10/tutorials/importing/).
 
 First, generate a fastq manifest file which maps sample IDs to the full path of your fastq files (compressed as fastq.gz is also fine). The manifest is a tab-delimited file (.tsv) with the following headers:
 
@@ -50,6 +50,7 @@ qiime tools validate paired-end-demux.qza
 ```
 
 A visualization of the imported sequences is often helpful.
+
 ```
 qiime demux summarize \
   --i-data paired-end-demux.qza \
@@ -64,7 +65,7 @@ Remove the primers from reads with cutadapt.
 * [Cutadapt standalone documentation](https://cutadapt.readthedocs.io/en/stable/guide.html) ([Martin 2011](https://doi.org/10.14806/ej.17.1.200))
 
 Parameter notes:
-* This example shows trimming [linked adapters](https://cutadapt.readthedocs.io/en/stable/guide.html#linked-adapters-combined-5-and-3-adapter) as the amplicon is "framed" by both a 5' and 3' adapter. This is equivalent to usine the -a and -A options in cutadapt and shows the forward primer linked to the reverse complement of the reverse primer and vice versa. The --p-front-f and --p-front-r options may also be used.
+* This example shows trimming [linked adapters](https://cutadapt.readthedocs.io/en/stable/guide.html#linked-adapters-combined-5-and-3-adapter) as the amplicon is "framed" by both a 5' and 3' adapter. This is equivalent to using the -a and -A options in cutadapt and shows the forward primer linked to the reverse complement of the reverse primer and vice versa. The --p-front-f and --p-front-r options may also be used.
 * Number of CPU cores (--p-cores) can be increased up to the number of available cores.
 
 ```
@@ -98,7 +99,7 @@ Generate and quantify amplicon sequence variants ASVs with DADA2
 Parameter notes:
 * --p-n-threads is set to 0 which uses all available cores. Adjust accordingly.
 * --p-max-ee-r is set to 4 (default: 2) which we often do for MiSeq 2x300 runs. You may want to adjust the max-ee paramters (number of expected errors) depending on your data.
-* --p-trunc-len-f and --p-trunc-len-r are base on typical read quality profiles we observe with MiSeq 2x300 sequencing. It is highly likely you should adjust these parameters for your own sequencing run. However, DADA2 requires a minimum of 20 nucleotides of overlap.
+* --p-trunc-len-f and --p-trunc-len-r are based on typical read quality profiles we observe with MiSeq 2x300 sequencing. It is highly likely you will need to adjust these parameters for your own sequencing run. However, DADA2 requires a minimum of 20 nucleotides of overlap.
 * If you have a large project that spans multiple sequence runs, run dada2 separately on each run. This is because different runs can have different error profiles (See https://benjjneb.github.io/dada2/bigdata.html). Since ASVs have single nucleotide level resolution, the data can later be merged (see instructions below). If merging data, ensure that your dada2 parameters are consistent. 
 
 ```
@@ -133,7 +134,7 @@ qiime metadata tabulate \
 
 ## Merge and summarize denoised data
 
-If you have multiple sequencing runs, proceed with merging the table and sequences from separate dada2 runs. If not, proceed to the summarization and export steps.
+If you have multiple sequencing runs, proceed with merging the table and sequences from separate DADA2 runs. If not, proceed to the summarization and export steps.
 
 Merge (add additional lines for --i-tables and --i-data as needed):
 
@@ -218,7 +219,7 @@ qiime tools export \
 mv asv_tax_dir/taxonomy.tsv asv_tax_dir/silva_taxonomy.tsv
 ```
 
-### PhytorREF
+### PhytoREF
 
 Create a simple fasta file and tab-delimited taxonomy file that links the fasta IDs to the taxonomic string. For example:
 
