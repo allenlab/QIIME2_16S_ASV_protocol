@@ -103,6 +103,8 @@ Parameter notes:
 * If you have a large project that spans multiple sequence runs, run dada2 separately on each run. This is because different runs can have different error profiles (See https://benjjneb.github.io/dada2/bigdata.html). Since ASVs have single nucleotide level resolution, the data can later be merged (see instructions below). If merging data, ensure that your dada2 parameters are consistent. 
 
 ```
+mkdir asvs
+
 qiime dada2 denoise-paired \
     --i-demultiplexed-seqs paired-end-demux-trimmed.qza \
     --p-n-threads 0 \
@@ -113,15 +115,9 @@ qiime dada2 denoise-paired \
     --p-max-ee-r 4 \
     --p-n-reads-learn 1000000 \
     --p-chimera-method pooled \
-    --output-dir ./asvs/ \
-    --o-table table-dada2.qza \
-    --o-representative-sequences rep-seqs-dada2.qza \
-    --o-denoising-stats stats-dada2.qza
-
-# Files don't actually get put in output-dir
-mv table-dada2.qza ./asvs/
-mv rep-seqs-dada2.qza ./asvs/
-mv stats-dada2.qza ./asvs/
+    --o-table ./asvs/table-dada2.qza \
+    --o-representative-sequences ./asvs/rep-seqs-dada2.qza \
+    --o-denoising-stats ./asvs/stats-dada2.qza
 ```
 
 Generate and examine the DADA2 stats. You should be retaining most (>50%) of your sequences. If you are losing a large number of sequences at a certain DADA2 step, you will need to troubleshoot and adjust your DADA2 parameters accordingly.
