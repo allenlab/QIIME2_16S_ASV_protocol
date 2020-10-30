@@ -281,9 +281,9 @@ From here, you should be able to do additional analyses within QIIME2. If you wo
 ```
 asv_table <- read.delim("asv_table/asv-table.tsv", header=FALSE, row.names=NULL, stringsAsFactors=FALSE, na.strings = "n/a")
 silva <- read.delim('./asv_tax_dir/silva_taxonomy.tsv', header=TRUE, row.names=NULL)
-names(silva) <- paste("silva", names(silva), sep="_")
+names(silva)[2:3] <- paste("silva", names(silva)[2:3], sep="_")
 phytoref <- read.delim('./asv_tax_dir/phytoref_taxonomy.tsv', header=TRUE, row.names=NULL)
-names(phytoref) <- paste("phytoref", names(phytoref), sep="_")
+names(phytoref)[2:3] <- paste("phytoref", names(phytoref)[2:3], sep="_")
 
 output <- merge(asv_table, silva, by="Feature.ID")
 output <- merge(output, phytoref, by="Feature.ID")
