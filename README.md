@@ -100,6 +100,7 @@ Parameter notes:
 * --p-n-threads is set to 0 which uses all available cores. Adjust accordingly.
 * --p-max-ee-r is set to 4 (default: 2) which we often do for MiSeq 2x300 runs. You may want to adjust the max-ee paramters (number of expected errors) depending on your data.
 * --p-trunc-len-f and --p-trunc-len-r are based on typical read quality profiles we observe with MiSeq 2x300 sequencing. It is highly likely you will need to adjust these parameters for your own sequencing run. However, DADA2 requires a minimum of 20 nucleotides of overlap.
+* --p-chimera-method consensus is the default and may perform better than pooled (See https://forum.qiime2.org/t/dada2-chimera-filtering-and-beyond/8685/3)
 * If you have a large project that spans multiple sequence runs, run dada2 separately on each run. This is because different runs can have different error profiles (See https://benjjneb.github.io/dada2/bigdata.html). Since ASVs have single nucleotide level resolution, the data can later be merged (see instructions below). If merging data, ensure that your dada2 parameters are consistent. 
 
 ```
@@ -280,12 +281,8 @@ From here, you should be able to do additional analyses within QIIME2. If you wo
 
 ```
 # Read in asv table
-## Older versions of QIIME
-asv_table <- read.delim("asv_table/asv-table.tsv", header=FALSE, row.names=NULL, stringsAsFactors=FALSE, na.strings = "n/a")
-# Newer versions of QIIME (tested with 2020.06)
 asv_table <- read.delim("asv_table/asv-table.tsv", header=TRUE, row.names=NULL, stringsAsFactors=FALSE, na.strings = "n/a", skip = 1)
 names(asv_table)[1] <- "Feature.ID"
-
 
 silva <- read.delim('./asv_tax_dir/silva_taxonomy.tsv', header=TRUE, row.names=NULL)
 names(silva)[2:3] <- paste("silva", names(silva)[2:3], sep="_")
